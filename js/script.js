@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             seconds = timer.querySelector('#seconds'),
             timeInterval = setInterval(updateClock, 1000);
 
-        updateClock();//вызываем для тогоБ чтобы при обновлении страницыБ сразу показывалу текущий таймерБ а не указанный в верстке
+        updateClock();//вызываем для того чтобы при обновлении страницы сразу показывало текущий таймер а не указанный в верстке
         function updateClock () {
             const t = getTimeRemaining(endtime);
             days.innerHTML = getZero(t.days);
@@ -99,4 +99,55 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
     setClock('.timer', deadline);
+
+    //Modal
+
+    const btnsModal = document.querySelectorAll('[data-modal]'),
+          modal = document.querySelector('.modal'),
+          closeModal = document.querySelector('[data-close]');
+
+    function openModal () {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimer);
+    };
+    
+    btnsModal.forEach(btn => {
+        btn.addEventListener('click', () => {
+            openModal();
+        })
+    });
+
+    function closeModalWindow() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+    closeModal.addEventListener('click', closeModalWindow);
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModalWindow();
+        }
+    });
+ 
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Escape' && modal.classList.contains('show')) {
+            closeModalWindow();
+        }
+    });
+
+    const modalTimer = setTimeout(openModal, 5000);
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    };
+
+    window.addEventListener('scroll', showModalByScroll);
+
 });
