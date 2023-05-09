@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	//Timer
 
-	const deadline = '2023-05-11';
+	const deadline = '2023-05-20';
 
 	function getTimeRemaining(endtime) {
 		let days, hours, minutes, seconds;
@@ -284,4 +284,56 @@ document.addEventListener('DOMContentLoaded', () => {
 	fetch('http://localhost:3000/menu')
 		.then(data => data.json())
 		.then(res => console.log(res));
+
+	//Slider
+
+	const nextButton = document.querySelector('.offer__slider-next'),
+		prevButton = document.querySelector('.offer__slider-prev'),
+		slide = document.querySelectorAll('.offer__slide'),
+		total = document.querySelector('#total'),
+		current = document.querySelector('#current');
+
+	let slideIndex = 1;
+
+	showSlide(slideIndex);
+
+	if (slide.length < 10) {
+		total.textContent = `0${slide.length}`;
+	} else {
+		total.textContent = slide.length;
+	}
+
+	function showSlide(n) {
+		if (n > slide.length) {
+			slideIndex = 1;
+		} 
+		if (n  < 1) {
+			slideIndex = slide.length;
+		}
+
+		slide.forEach(slide => {
+			slide.style.display = 'none';
+		});
+
+		slide[slideIndex -1].style.display = 'block';
+
+		if (slide.length < 10) {
+			current.textContent = `0${slideIndex}`;
+		} else {
+			current.textContent = slideIndex;
+		}
+
+	}
+
+	function plusSlide(n) {
+		showSlide(slideIndex += n);
+	}
+
+	nextButton.addEventListener('click', ()=> {
+		plusSlide(1);
+	});
+
+	prevButton.addEventListener('click', ()=> {
+		plusSlide(-1);
+	});
 });
